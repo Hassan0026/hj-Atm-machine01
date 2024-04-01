@@ -16,10 +16,22 @@ if (pinAnswer.pin === myPin) {
             name: "operation",
             message: "please select option",
             type: "list",
-            choices: ["withdraw", "check balance"]
+            choices: ["withdraw", "check balance", "fast cash"],
         }
     ]);
-    console.log(operationAns);
+    if (operationAns.operation == "fast cash") {
+        let amountfastcash = await inquirer.prompt([{
+                name: "fastcash",
+                message: "Select the amount you want to withdraw",
+                type: "list",
+                choices: [500, 1000, 5000, 10000],
+            }
+        ]);
+        console.log(`Your remaining balance is ${myBalance - amountfastcash.fastcash}Rs.`);
+    }
+    else if (operationAns.operation === "check balance") {
+        console.log("your balance is:" + myBalance);
+    }
     if (operationAns.operation === "withdraw") {
         let amountAns = await inquirer.prompt([
             {
@@ -29,7 +41,14 @@ if (pinAnswer.pin === myPin) {
             }
         ]);
         myBalance -= amountAns.amount;
-        console.log("your remaining balance is: " + myBalance);
+        if (operationAns.withdraw <= myBalance) {
+            console.log(`you withdraw ${operationAns.withdraw}`);
+            console.log(`your remaining balance is ${myBalance - operationAns.withdraw}Rs.`);
+        }
+        else {
+            console.log(`You don't have enough balance`);
+        }
+        ;
     }
     else if (operationAns.operation === "check balance") {
         console.log("your balance is:" + myBalance);
